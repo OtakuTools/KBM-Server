@@ -1,5 +1,4 @@
 var database = require('./../database/DataBaseMySQL');
-var utils = require('./Utils_public');
 
 var dbController = function() {
 	
