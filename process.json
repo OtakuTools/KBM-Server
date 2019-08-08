@@ -1,0 +1,8 @@
+{
+  "apps" : [{
+    "name"             : "kbm",     //项目名称
+    "script"           : "bin/www", //项目执行的脚本文件
+    "watch"            : true,
+    "log_date_format"  : "YYYY-MM-DD HH:mm Z",
+  }]
+}

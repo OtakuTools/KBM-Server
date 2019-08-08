@@ -1,5 +1,6 @@
 var dbController = require('./DBController_public');
 var utils = require('./utils');
+var CONFIG = require('./Config');
 
 var userSystem = function() {
 
@@ -24,7 +25,7 @@ var userSystem = function() {
         try {
             let result = await dbController.ControlAPI_obj_async(stru);
             if(result.length == 0){
-                utils.sendResponse(res, 404, {"errorCode": 101, "msg": "该用户不存在"});
+                utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.LOGIN_FAIL, "msg": "该用户不存在"});
             } else {
                 let token = this.generatorToken(result[0].username, result[0].type);
                 stru["query"] = "insert";
@@ -37,12 +38,12 @@ var userSystem = function() {
                     await dbController.ControlAPI_obj_async(stru);
                     utils.sendResponse(res, 200, {"errorCode": 0, "msg": "登录成功", "data": { "token" : token}});
                 } catch(error) {
-                    utils.sendResponse(res, 404, {"errorCode": 101, "msg": "该用户已登录"});
+                    utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.LOGIN_FAIL, "msg": "该用户已登录"});
                 }
             }
         } catch(error) {
             console.error(error);
-            utils.sendResponse(res, 404, {"errorCode": 101, "msg": "select语句出错"});
+            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.LOGIN_FAIL, "msg": "select语句出错"});
         }
     },
 
@@ -60,7 +61,7 @@ var userSystem = function() {
             await dbController.ControlAPI_obj_async(stru);
             utils.sendResponse(res, 200, {"errorCode": 0, "msg": "注册成功"});
         } catch(error) {
-            utils.sendResponse(res, 404, {"errorCode": 102, "msg": "用户名重复"});
+            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.REGIST_FAIL, "msg": "用户名重复"});
         }
     },
 
@@ -80,7 +81,7 @@ var userSystem = function() {
             await dbController.ControlAPI_obj_async(stru);
             utils.sendResponse(res, 200, {"errorCode": 0, "msg": "更新信息成功"});
         } catch(error) {
-            utils.sendResponse(res, 404, {"errorCode": 103, "msg": "更新信息失败"});
+            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.UPDATE_USER_FAIL, "msg": "更新信息失败"});
         }
     },
 
@@ -96,7 +97,7 @@ var userSystem = function() {
             await dbController.ControlAPI_obj_async(stru);
             utils.sendResponse(res, 200, {"errorCode": 0, "msg": "删除用户成功"});
         } catch(error) {
-            utils.sendResponse(res, 404, {"errorCode": 104, "msg": "删除用户失败"});
+            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.DELETE_USER_FAIL, "msg": "删除用户失败"});
         }
     },
 
@@ -113,12 +114,12 @@ var userSystem = function() {
         try {
             let result = await dbController.ControlAPI_obj_async(stru);
             if(result.length == 0){
-                utils.sendResponse(res, 404, {"errorCode": 105, "msg": "当前系统无用户信息"});
+                utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.GET_USER_FAIL, "msg": "当前系统无用户信息"});
             } else {
-                utils.sendResponse(res, 200, {"errorCode": 0, "msg": "查询用户状态成功", "data": { "info" : result}});
+                utils.sendResponse(res, 200, {"errorCode": 0, "msg": "查询用户状态成功", "data": result});
             }
         } catch(error) {
-            utils.sendResponse(res, 404, {"errorCode": 105, "msg": "无法查询用户信息"});
+            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.GET_USER_FAIL, "msg": "无法查询用户信息"});
         }
     },
 
@@ -133,11 +134,11 @@ var userSystem = function() {
             await dbController.ControlAPI_obj_async(stru);
             utils.sendResponse(res, 200, {"errorCode": 0, "msg": "退出登录成功"});
         } catch(error) {
-            utils.sendResponse(res, 404, {"errorCode": 106, "msg": "退出登录失败"});
+            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.LOGOUT_FAIL, "msg": "退出登录失败"});
         }
     },
 
-    this.userCheck = async (req, res, next) => {
+    this.userLoginCheck = async (req, res, next) => {
         let stru = dbController.getSQLObject();
         stru["query"] = "select";
         stru["tables"] = "loginRecord";
@@ -151,13 +152,23 @@ var userSystem = function() {
         try {
             let result = await dbController.ControlAPI_obj_async(stru);
             if(result.length == 0){
-                utils.sendResponse(res, 404, {"errorCode": 100, "msg": "请先登录"});
+                utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.LOGINCHECK_FAIL, "msg": "请先登录"});
                 return;
             } else {
                 next();
             }
         } catch(error) {
-            utils.sendResponse(res, 404, {"errorCode": 100, "msg": "请先登录"});
+            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.LOGINCHECK_FAIL, "msg": "请先登录"});
+        }
+    },
+    
+    this.userPermissionCheck = (req, res, next) => {
+        let token = req.query.token;
+        var [type, name, time] = token.split("_");
+        if(type == CONFIG.UserType.admin) {
+            next();
+        } else {
+            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.PERMISSION_FAIL, "msg": "没有权限"});
         }
     }
 };
