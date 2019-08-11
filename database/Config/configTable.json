@@ -38,7 +38,9 @@
 			"foreign key(username) references userInfo(username) ON UPDATE CASCADE ON DELETE NO ACTION",
 		") engine=InnoDB;"],
 		["create table if not exists seqRecord(",
-			"seq int(3)",
+			"day nvarchar(20),",
+			"seq int(3) zerofill default 1,",
+			"primary key(day)",
 		") engine=InnoDB;"]
 	]
 }

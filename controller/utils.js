@@ -11,6 +11,11 @@ var utils = function() {
         var date = new Date();
         return "" + date.valueOf();
     }
+
+    this.getDate = () => {
+        var date = new Date();
+        return date.toLocaleDateString();
+    }
 };
 
 module.exports = new utils();

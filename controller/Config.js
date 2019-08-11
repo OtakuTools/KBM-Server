@@ -16,6 +16,7 @@ var CONFIG = {
         DELETE_DATA_FAIL: 203,
         SELECT_DATA_FAIL: 204,
         SEARCH_DATA_FAIL: 205,
+        GET_SEQ_FAIL: 206,
     },
 
     UserType : {

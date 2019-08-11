@@ -136,13 +136,53 @@ var infoSystem = function() {
         stru["where"]["condition"] = searchBy_items;
         stru["options"] = searchOption_items;
 
-        try{
+        try {
 			let result = await db.ControlAPI_obj_async(strc);
 			utils.sendResponse(res, 200, {"errorCode": 0, "msg": "", "data" : { "count": result.length, "content" : result}});
-		}
-		catch(error){
+		} catch(error) {
 			utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.SEARCH_DATA_FAIL, "msg": "查找知识失败"})
 		}
+    },
+
+    this.getSeq = async (req , res, next) => {
+        let today = utils.getDate();
+        let stru = dbController.getSQLObject();
+        stru["query"] = "insert";
+        stru["tables"] = "seqRecord";
+        stru["data"] = {
+            "day": today,
+            "seq": 1
+        };
+
+        let stru1 = dbController.getSQLObject();
+        stru1["query"] = "select";
+        stru1["tables"] = "seqRecord";
+        stru1["data"] = {
+            "seq": 0
+        };
+        stru1["where"]["condition"] = [
+            "day = " + dbController.typeTransform(today)
+        ];
+
+        let stru2 = dbController.getSQLObject_sv();
+        stru2["sql"] = `update seqRecord set seq = seq + 1 where day = '${today}';`;
+        try {
+            await dbController.ControlAPI_obj_async(stru);
+        } catch(error) {
+            console.error("当前日期已存在");
+        }
+
+        try {
+            let result = await dbController.ControlAPI_obj_async(stru1);
+            try {
+                await dbController.ControlAPI_str_async(stru2);
+                utils.sendResponse(res, 200, {"errorCode": 0, "msg": "", "data": result[0]});
+            } catch (error) {
+                utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.GET_SEQ_FAIL, "msg": "更新序号失败"});
+            }
+        } catch (error) {
+            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.GET_SEQ_FAIL, "msg": "获取序号失败"});
+        }
     },
 
     this.userPermissionCheck = (req, res, next) => {

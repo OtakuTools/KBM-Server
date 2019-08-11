@@ -103,6 +103,19 @@ var dbController = function() {
 		});
 	};
 	
+	this.ControlAPI_str_async = function(sqlObj) {
+		return new Promise((resolved, rejected)=>{
+			this._generalOperation(sqlObj["sql"], sqlObj["value"], (result)=>{
+				if(result === null){
+					rejected(null);
+				}
+				else{
+					resolved(result);
+				}
+			});
+		});
+	}
+
 	this.ControlAPI_obj_async = function(data) {
 		var sqlObj = this._structureAnalysis(data);
 		return new Promise((resolved, rejected)=>{

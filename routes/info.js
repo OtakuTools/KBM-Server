@@ -12,7 +12,9 @@ router.post('/updateStatus', userSystem.userLoginCheck, infoSystem.userPermissio
 
 router.get('/delete', userSystem.userLoginCheck, infoSystem.userPermissionCheck, infoSystem.deleteInfo);
 
-router.get('/get', userSystem.userLoginCheck, infoSystem.userPermissionCheck, infoSystem.getInfo);
+router.get('/getInfo', userSystem.userLoginCheck, infoSystem.userPermissionCheck, infoSystem.getInfo);
+
+router.get('/getSeq', userSystem.userLoginCheck, infoSystem.userPermissionCheck, infoSystem.getSeq);
 
 router.get('/search', userSystem.userLoginCheck, infoSystem.userPermissionCheck, infoSystem.searchInfo);
 
