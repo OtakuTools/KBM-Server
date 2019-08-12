@@ -7,6 +7,9 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
 var infoRouter = require('./routes/info');
+var ws = require('./controller/WebSocket');
+
+ws.listen(3001);
 
 var app = express();
 
