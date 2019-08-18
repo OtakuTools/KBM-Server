@@ -18,7 +18,7 @@ var infoSystem = function() {
 			"discoverTime" : req.body.discoverTime,
             "resolveTime" : req.body.resolveTime,
             "lastfor" : req.body.lastfor,
-			"kTitle" : req.nody.kTitle,
+			"kTitle" : req.body.kTitle,
 			"kContent" : req.body.kContent,
 			"kMethod" : req.body.kMethod,
 			"curStatus" : 0
@@ -42,9 +42,10 @@ var infoSystem = function() {
 			"discoverTime" : req.body.discoverTime,
             "resolveTime" : req.body.resolveTime,
             "lastfor" : req.body.lastfor,
-			"kTitle" : req.nody.kTitle,
+			"kTitle" : req.body.kTitle,
 			"kContent" : req.body.kContent,
-			"kMethod" : req.body.kMethod,
+            "kMethod" : req.body.kMethod,
+            "curStatus": req.body.curStatus
         };
         stru["where"]["condition"] = [
             "sequence = " + dbController.typeTransform(req.body.sequence)
