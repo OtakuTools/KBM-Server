@@ -160,6 +160,7 @@ var infoSystem = function() {
         stru1["query"] = "select";
         stru1["tables"] = "seqRecord";
         stru1["data"] = {
+            "day": 0,
             "seq": 0
         };
         stru1["where"]["condition"] = [
