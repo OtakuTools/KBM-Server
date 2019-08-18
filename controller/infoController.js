@@ -125,22 +125,23 @@ var infoSystem = function() {
         let searchOption_items = {};
         let orderStr = "sequence ";
         
-        if(req.query.page && req.query.pageSize) {
-            searchOption_items["limit"] =  (req.query.page-1) * req.query.pageSize + "," + req.query.pageSize;
-        }
         if(req.query.sortOrder) {
 			orderStr += (req.query.sortOrder && req.query.sortOrder == "asc") ? "ASC" : "DESC";
         }
         searchOption_items["order by"] = orderStr;
 
+        if(req.query.page && req.query.pageSize) {
+            searchOption_items["limit"] =  (req.query.page-1) * req.query.pageSize + "," + req.query.pageSize;
+        }
+
         stru["where"]["condition"] = searchBy_items;
         stru["options"] = searchOption_items;
 
         try {
-			let result = await db.ControlAPI_obj_async(strc);
+			let result = await dbController.ControlAPI_obj_async(stru);
 			utils.sendResponse(res, 200, {"errorCode": 0, "msg": "", "data" : { "count": result.length, "content" : result}});
 		} catch(error) {
-			utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.SEARCH_DATA_FAIL, "msg": "查找知识失败"})
+			utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.SEARCH_DATA_FAIL, "msg": "查找知识失败 " + error})
 		}
     },
 
