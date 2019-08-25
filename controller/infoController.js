@@ -114,8 +114,9 @@ var infoSystem = function() {
         stru["query"] = "select";
         stru["tables"] = "knowledge";
         stru["data"] = {
-            "*" : 0
+            "COUNT(*)" : 0
         };
+        let total = 0;
         let searchBy_items = [];
         if(req.query.department) {
             searchBy_items.push("department = " +  dbController.typeTransform(req.query.department))
@@ -123,24 +124,33 @@ var infoSystem = function() {
         if(req.query.applicant) {
             searchBy_items.push("applicant = " +  dbController.typeTransform(req.query.applicant))
         }
+        stru["where"]["condition"] = searchBy_items;
+        try {
+            let result = await dbController.ControlAPI_obj_async(stru);
+            total = result[0]["COUNT(*)"];
+        } catch (error) {
+            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.SEARCH_DATA_FAIL, "msg": "查找知识失败 " + error})
+            return;
+        }
+
+        stru["data"] = {
+            "*" : 0
+        };
         let searchOption_items = {};
         let orderStr = "sequence ";
-        
         if(req.query.sortOrder) {
 			orderStr += (req.query.sortOrder && req.query.sortOrder == "asc") ? "ASC" : "DESC";
         }
         searchOption_items["order by"] = orderStr;
-
         if(req.query.page && req.query.pageSize) {
             searchOption_items["limit"] =  (req.query.page-1) * req.query.pageSize + "," + req.query.pageSize;
         }
 
-        stru["where"]["condition"] = searchBy_items;
         stru["options"] = searchOption_items;
 
         try {
 			let result = await dbController.ControlAPI_obj_async(stru);
-			utils.sendResponse(res, 200, {"errorCode": 0, "msg": "", "data" : { "count": result.length, "content" : result}});
+			utils.sendResponse(res, 200, {"errorCode": 0, "msg": "", "data" : { "count": total, "content" : result}});
 		} catch(error) {
 			utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.SEARCH_DATA_FAIL, "msg": "查找知识失败 " + error})
 		}
