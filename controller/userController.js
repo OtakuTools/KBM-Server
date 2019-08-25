@@ -109,7 +109,7 @@ var userSystem = function() {
             "userInfo.username as username": 0,
             "userInfo.type as type": 0,
             "isnull(loginRecord.token) as status": 0,
-            "ifnull(loginRecord.modifyTime, 0) as time": 0
+            "ifnull(loginRecord.modifyTime, 0) as lastLogin": 0
         };
         try {
             let result = await dbController.ControlAPI_obj_async(stru);
