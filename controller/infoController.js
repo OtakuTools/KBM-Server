@@ -23,6 +23,12 @@ var infoSystem = function() {
 			"kMethod" : req.body.kMethod,
 			"curStatus" : 0
         };
+        if (req.body.author) {
+            stru["data"]["author"] = req.body.author;
+        }
+        if (req.body.auditor) {
+            stru["data"]["auditor"] = req.body.auditor;
+        }
         try {
             await dbController.ControlAPI_obj_async(stru);
             utils.sendResponse(res, 200, {"errorCode": 0, "msg": "新建知识成功"});
@@ -47,6 +53,12 @@ var infoSystem = function() {
             "kMethod" : req.body.kMethod,
             "curStatus": req.body.curStatus
         };
+        if (req.body.author) {
+            stru["data"]["author"] = req.body.author;
+        }
+        if (req.body.auditor) {
+            stru["data"]["auditor"] = req.body.auditor;
+        }
         stru["where"]["condition"] = [
             "sequence = " + dbController.typeTransform(req.body.sequence)
         ];
@@ -63,7 +75,8 @@ var infoSystem = function() {
         stru["query"] = "update";
         stru["tables"] = "knowledge";
         stru["data"] = {
-            "curStatus": req.body.curStatus
+            "curStatus": req.body.curStatus,
+            "auditor": req.body.auditor
         };
         stru["where"]["condition"] = [
             "sequence = " + dbController.typeTransform(req.body.sequence)
@@ -123,6 +136,9 @@ var infoSystem = function() {
         }
         if(req.query.applicant) {
             searchBy_items.push("applicant = " +  dbController.typeTransform(req.query.applicant))
+        }
+        if(req.query.author) {
+            searchBy_items.push("author = " +  dbController.typeTransform(req.query.author))
         }
         stru["where"]["condition"] = searchBy_items;
         try {

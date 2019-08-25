@@ -10,7 +10,7 @@ router.post('/regist', userSystem.userRegist);
 
 router.post('/update', userSystem.userLoginCheck, userSystem.userPermissionCheck, userSystem.userUpdate);
 
-router.get('/delete', userSystem.userLoginCheck, userSystem.userPermissionCheck, userSystem.userDelete);
+router.post('/delete', userSystem.userLoginCheck, userSystem.userPermissionCheck, userSystem.userDelete);
 
 router.get('/logout', userSystem.userLogout);
 
