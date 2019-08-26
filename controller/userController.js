@@ -101,6 +101,22 @@ var userSystem = function() {
         }
     },
 
+    this.userForcedOffline = async (req, res, next) => {
+        let stru = dbController.getSQLObject();
+        stru["query"] = "delete";
+        stru["tables"] = "loginRecord";
+        stru["where"]["condition"] = [
+            "username = " + dbController.typeTransform(req.body.username)
+        ];
+
+        try {
+            await dbController.ControlAPI_obj_async(stru);
+            utils.sendResponse(res, 200, {"errorCode": 0, "msg": "强制下线成功"});
+        } catch(error) {
+            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.DELETE_USER_FAIL, "msg": "强制下线失败"});
+        }
+    },
+
     this.userGetInfo = async (req, res, next) => {
         let stru = dbController.getSQLObject();
         stru["query"] = "select";

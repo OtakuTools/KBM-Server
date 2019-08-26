@@ -131,14 +131,20 @@ var infoSystem = function() {
         };
         let total = 0;
         let searchBy_items = [];
-        if(req.query.department) {
-            searchBy_items.push("department = " +  dbController.typeTransform(req.query.department))
+        if (req.query.department) {
+            searchBy_items.push("department = " +  dbController.typeTransform(req.query.department));
         }
-        if(req.query.applicant) {
-            searchBy_items.push("applicant = " +  dbController.typeTransform(req.query.applicant))
+        if (req.query.applicant) {
+            searchBy_items.push("applicant = " +  dbController.typeTransform(req.query.applicant));
         }
-        if(req.query.author) {
-            searchBy_items.push("author = " +  dbController.typeTransform(req.query.author))
+        if (req.query.status) {
+            searchBy_items.push("curStatus = " +  dbController.typeTransform(parseInt(req.query.status)));
+            let [type, name, t] = req.query.token.split("_");
+            if (type == CONFIG.UserType.dataEntry && parseInt(req.query.status) <= CONFIG.Status.SUBMIT_SUCC) {
+                searchBy_items.push("author = " +  dbController.typeTransform(name))
+            } else if (type == CONFIG.UserType.manager && parseInt(req.query.status) < CONFIG.Status.SUBMIT_SUCC) {
+                searchBy_items.push("author = \'\'")
+            }
         }
         stru["where"]["condition"] = searchBy_items;
         try {

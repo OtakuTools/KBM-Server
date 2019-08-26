@@ -12,6 +12,8 @@ router.post('/update', userSystem.userLoginCheck, userSystem.userPermissionCheck
 
 router.post('/delete', userSystem.userLoginCheck, userSystem.userPermissionCheck, userSystem.userDelete);
 
+router.post('/offline', userSystem.userLoginCheck, userSystem.userPermissionCheck, userSystem.userForcedOffline)
+
 router.get('/logout', userSystem.userLogout);
 
 router.get('/information', userSystem.userLoginCheck, userSystem.userPermissionCheck, userSystem.userGetInfo);

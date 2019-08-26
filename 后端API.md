@@ -51,7 +51,20 @@
 }
 
 /**
- * GET user/delete?token=xxxxx
+ * POST user/delete?token=xxxxx
+ */
+// ======== Send =======
+{
+    username: string
+}
+// ======== Recieve =======
+{
+    errorCode: int
+    msg: string
+}
+
+/**
+ * POST user/offline?token=xxxxx
  */
 // ======== Send =======
 {
@@ -105,7 +118,8 @@
     "lastfor" : string,
     "kTitle" : string,
     "kContent" : string,
-    "kMethod" : string
+    "kMethod" : string,
+    "author": string
 }
 // ======== Recieve =======
 {
@@ -127,7 +141,8 @@
     "lastfor" : string,
     "kTitle" : string,
     "kContent" : string,
-    "kMethod" : string
+    "kMethod" : string,
+    "author": string
 }
 // ======== Recieve =======
 {
@@ -140,7 +155,8 @@
  */
 // ======== Send =======
 {
-    "curStatus" : int
+    "curStatus" : int,
+    "auditor": string
 }
 // ======== Recieve =======
 {
@@ -184,7 +200,7 @@
 }
 
 /**
- * GET info/search?token=xxxx(&department=yyyy)(&applicant=yyyy)(&page=yyyy&pageSize=yyyy)(&sortOrder=yyyy)
+ * GET info/search?token=xxxx(&status=yyyy)(&department=yyyy)(&applicant=yyyy)(&page=yyyy&pageSize=yyyy)(&sortOrder=yyyy)
  */
 // ======== Send =======
 
