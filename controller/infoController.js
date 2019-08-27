@@ -1,6 +1,7 @@
 var dbController = require('./DBController_public');
 var utils = require('./utils');
 var CONFIG = require('./Config');
+var logSystem = require("./logController");
 
 var infoSystem = function() {
 
@@ -31,6 +32,7 @@ var infoSystem = function() {
         }
         try {
             await dbController.ControlAPI_obj_async(stru);
+            await logSystem.addLog(req.query.token.split('_')[1], 1, `新建知识：${req.body.sequence}`);
             utils.sendResponse(res, 200, {"errorCode": 0, "msg": "新建知识成功"});
         } catch(error) {
             utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.INSERT_DATA_FAIL, "msg": "新建知识失败"});
@@ -64,6 +66,7 @@ var infoSystem = function() {
         ];
         try {
             await dbController.ControlAPI_obj_async(stru);
+            await logSystem.addLog(req.query.token.split('_')[1], 1, `修改知识：${req.body.sequence}`);
             utils.sendResponse(res, 200, {"errorCode": 0, "msg": "修改知识成功"});
         } catch(error) {
             utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.UPDATE_DATA_FAIL, "msg": "修改知识失败"});
@@ -83,9 +86,10 @@ var infoSystem = function() {
         ];
         try {
             await dbController.ControlAPI_obj_async(stru);
-            utils.sendResponse(res, 200, {"errorCode": 0, "msg": "修改知识成功"});
+            await logSystem.addLog(req.query.token.split('_')[1], 1, `修改知识 ${req.body.sequence} 状态至 ${req.body.curStatus}`);
+            utils.sendResponse(res, 200, {"errorCode": 0, "msg": "修改知识状态成功"});
         } catch(error) {
-            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.UPDATE_DATA_FAIL, "msg": "修改知识失败"});
+            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.UPDATE_DATA_FAIL, "msg": "修改知识状态失败"});
         }
     },
 
@@ -98,6 +102,7 @@ var infoSystem = function() {
         ];
         try {
             await dbController.ControlAPI_obj_async(stru);
+            await logSystem.addLog(req.query.token.split('_')[1], 1, `删除知识：${req.query.sequence}`);
             utils.sendResponse(res, 200, {"errorCode": 0, "msg": "删除知识成功"});
         } catch(error) {
             utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.DELETE_DATA_FAIL, "msg": "删除知识失败"});

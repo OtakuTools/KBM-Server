@@ -6,7 +6,7 @@ var router = express.Router();
 /* GET users listing. */
 router.post('/login', userSystem.userLogin);
 
-router.post('/regist', userSystem.userRegist);
+router.post('/regist', userSystem.userLoginCheck, userSystem.userPermissionCheck, userSystem.userRegist);
 
 router.post('/update', userSystem.userLoginCheck, userSystem.userPermissionCheck, userSystem.userUpdate);
 

@@ -1,6 +1,7 @@
 var dbController = require('./DBController_public');
 var utils = require('./utils');
 var CONFIG = require('./Config');
+var logSystem = require("./logController");
 
 var userSystem = function() {
 
@@ -36,6 +37,7 @@ var userSystem = function() {
                 };
                 try {
                     await dbController.ControlAPI_obj_async(stru);
+                    await logSystem.addLog(result[0].username, 0, "用户登陆");
                     utils.sendResponse(res, 200, {"errorCode": 0, "msg": "登录成功", "data": { "token" : token}});
                 } catch(error) {
                     utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.LOGIN_FAIL, "msg": "该用户已登录"});
@@ -59,6 +61,7 @@ var userSystem = function() {
 
         try {
             await dbController.ControlAPI_obj_async(stru);
+            await logSystem.addLog(req.query.token.split('_')[1], 0, `新建用户：${req.body.username}`);
             utils.sendResponse(res, 200, {"errorCode": 0, "msg": "注册成功"});
         } catch(error) {
             utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.REGIST_FAIL, "msg": "用户名重复"});
@@ -79,6 +82,7 @@ var userSystem = function() {
 
         try {
             await dbController.ControlAPI_obj_async(stru);
+            await logSystem.addLog(req.query.token.split('_')[1], 0, `更新用户：${req.body.username}`);
             utils.sendResponse(res, 200, {"errorCode": 0, "msg": "更新信息成功"});
         } catch(error) {
             utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.UPDATE_USER_FAIL, "msg": "更新信息失败"});
@@ -95,6 +99,7 @@ var userSystem = function() {
 
         try {
             await dbController.ControlAPI_obj_async(stru);
+            await logSystem.addLog(req.query.token.split('_')[1], 0, `删除用户：${req.body.username}`);
             utils.sendResponse(res, 200, {"errorCode": 0, "msg": "删除用户成功"});
         } catch(error) {
             utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.DELETE_USER_FAIL, "msg": "删除用户失败"});
@@ -111,6 +116,7 @@ var userSystem = function() {
 
         try {
             await dbController.ControlAPI_obj_async(stru);
+            await logSystem.addLog(req.query.token.split('_')[1], 0, `强制下线用户：${req.body.username}`);
             utils.sendResponse(res, 200, {"errorCode": 0, "msg": "强制下线成功"});
         } catch(error) {
             utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.DELETE_USER_FAIL, "msg": "强制下线失败"});
@@ -148,6 +154,7 @@ var userSystem = function() {
         ];
         try {
             await dbController.ControlAPI_obj_async(stru);
+            await logSystem.addLog(req.query.token.split('_')[1], 0, `用户登出`);
             utils.sendResponse(res, 200, {"errorCode": 0, "msg": "退出登录成功"});
         } catch(error) {
             utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.LOGOUT_FAIL, "msg": "退出登录失败"});
