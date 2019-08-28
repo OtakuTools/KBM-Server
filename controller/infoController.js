@@ -79,8 +79,13 @@ var infoSystem = function() {
         stru["tables"] = "knowledge";
         stru["data"] = {
             "curStatus": req.body.curStatus,
-            "auditor": req.body.auditor
         };
+        if (req.body.author) {
+            stru["data"]["author"] = req.body.author;
+        }
+        if (req.body.auditor) {
+            stru["data"]["auditor"] = req.body.auditor;
+        }
         stru["where"]["condition"] = [
             "sequence = " + dbController.typeTransform(req.body.sequence)
         ];
@@ -143,7 +148,8 @@ var infoSystem = function() {
             searchBy_items.push("applicant = " +  dbController.typeTransform(req.query.applicant));
         }
         if (req.query.status) {
-            searchBy_items.push("curStatus = " +  dbController.typeTransform(parseInt(req.query.status)));
+            let statusArr = req.query.status.split(",").map(e => `curStatus=${e}`);
+            searchBy_items.push(statusArr.join(" or "));
             let [type, name, t] = req.query.token.split("_");
             if (type == CONFIG.UserType.dataEntry && parseInt(req.query.status) <= CONFIG.Status.SUBMIT_SUCC) {
                 searchBy_items.push("author = " +  dbController.typeTransform(name))
