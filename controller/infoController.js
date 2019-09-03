@@ -149,7 +149,7 @@ var infoSystem = function() {
         }
         if (req.query.status) {
             let statusArr = req.query.status.split(",").map(e => `curStatus=${e}`);
-            searchBy_items.push(statusArr.join(" or "));
+            searchBy_items.push(`(${statusArr.join(" or ")})`);
             let [type, name, t] = req.query.token.split("_");
             if (type == CONFIG.UserType.dataEntry && parseInt(req.query.status) <= CONFIG.Status.SUBMIT_SUCC) {
                 searchBy_items.push("author = " +  dbController.typeTransform(name))
