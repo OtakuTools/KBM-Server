@@ -12,7 +12,9 @@ router.post('/update', userSystem.userLoginCheck, userSystem.userPermissionCheck
 
 router.post('/delete', userSystem.userLoginCheck, userSystem.userPermissionCheck, userSystem.userDelete);
 
-router.post('/offline', userSystem.userLoginCheck, userSystem.userPermissionCheck, userSystem.userForcedOffline)
+router.post('/offline', userSystem.userLoginCheck, userSystem.userPermissionCheck, userSystem.userForcedOffline);
+
+router.post('/modifyPsw', userSystem.userLoginCheck, userSystem.userChangePassword)
 
 router.get('/logout', userSystem.userLogout);
 

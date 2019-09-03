@@ -106,6 +106,43 @@ var userSystem = function() {
         }
     },
 
+    this.userChangePassword = async (req, res, next) => {
+        let stru = dbController.getSQLObject();
+        stru["query"] = "update";
+        stru["tables"] = "userInfo";
+        stru["data"] = {
+            "password": req.body.new
+        };
+        stru["where"]["condition"] = [
+            "username = " + dbController.typeTransform(req.body.username),
+            "password = " + dbController.typeTransform(req.body.old),
+        ];
+
+        let stru1 = dbController.getSQLObject();
+        stru1["query"] = "select";
+        stru1["tables"] = "userInfo";
+        stru1["data"] = {
+            "*": 0
+        };
+        stru1["where"]["condition"] = [
+            "username = " + dbController.typeTransform(req.body.username),
+            "password = " + dbController.typeTransform(req.body.old),
+        ];
+
+        try {
+            let result = await dbController.ControlAPI_obj_async(stru1);
+            if (result && result.length == 0) {
+                utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.UPDATE_USER_FAIL, "msg": "用户名与旧密码不相符"});
+                return;
+            }
+            await dbController.ControlAPI_obj_async(stru);
+            await logSystem.addLog(req.query.token.split('_')[1], 0, `更新用户密码：${req.body.username}`);
+            utils.sendResponse(res, 200, {"errorCode": 0, "msg": "更新用户密码成功"});
+        } catch(error) {
+            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.UPDATE_USER_FAIL, "msg": "更新用户密码失败"});
+        }
+    },
+
     this.userForcedOffline = async (req, res, next) => {
         let stru = dbController.getSQLObject();
         stru["query"] = "delete";

@@ -142,10 +142,10 @@ var infoSystem = function() {
         let total = 0;
         let searchBy_items = [];
         if (req.query.department) {
-            searchBy_items.push("department = " +  dbController.typeTransform(req.query.department));
+            searchBy_items.push("department LIKE " +  dbController.typeTransform(`%${req.query.department}%`));
         }
         if (req.query.applicant) {
-            searchBy_items.push("applicant = " +  dbController.typeTransform(req.query.applicant));
+            searchBy_items.push("applicant LIKE " +  dbController.typeTransform(`%${req.query.applicant}%`));
         }
         if (req.query.status) {
             let statusArr = req.query.status.split(",").map(e => `curStatus=${e}`);
