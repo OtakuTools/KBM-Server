@@ -17,7 +17,7 @@ var utils = function() {
     return this.DateFormat.call(date, "yyyy-MM-dd");
   }
 
-  this.DateFormat = (fmt) => {
+  this.DateFormat = function (fmt) {
     var o = {
       "M+": this.getMonth() + 1, //月份 
       "d+": this.getDate(), //日 
