@@ -56,7 +56,9 @@ var userSystem = function() {
         stru["data"] = {
             "username" : req.body.username,
             "password" : req.body.password,
-            "type" : req.body.type
+            "type" : req.body.type,
+            "realname" : req.body.realname,
+            "department" : req.body.department
         };
 
         try {
@@ -167,6 +169,8 @@ var userSystem = function() {
         stru["data"] = {
             "userInfo.username as username": 0,
             "userInfo.type as type": 0,
+            "userInfo.realname as realname": 0,
+            "userInfo.department as department": 0,
             "isnull(loginRecord.token) as status": 0,
             "ifnull(loginRecord.modifyTime, 0) as lastLogin": 0
         };
