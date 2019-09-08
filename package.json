@@ -13,6 +13,7 @@
     "express-session": "^1.16.2",
     "formidable": "^1.2.1",
     "http-errors": "~1.6.3",
+    "lock": "^1.1.0",
     "morgan": "^1.9.1",
     "mysql": "^2.17.1",
     "nodejs-websocket": "^1.7.2",
