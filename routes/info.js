@@ -10,6 +10,8 @@ router.post('/modify', userSystem.userLoginCheck, infoSystem.userPermissionCheck
 
 router.post('/updateStatus', userSystem.userLoginCheck, infoSystem.userPermissionCheck, infoSystem.modifyInfoStatus);
 
+router.post('/getBadge', userSystem.userLoginCheck, infoSystem.userPermissionCheck, infoSystem.searchInfoCount);
+
 router.get('/delete', userSystem.userLoginCheck, infoSystem.userPermissionCheck, infoSystem.deleteInfo);
 
 router.get('/getInfo', userSystem.userLoginCheck, infoSystem.userPermissionCheck, infoSystem.getInfo);

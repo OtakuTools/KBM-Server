@@ -135,6 +135,40 @@ var infoSystem = function() {
         }
     },
 
+    this.searchInfoCount = async (req, res, next) => {
+        let stru = dbController.getSQLObject();
+        stru["query"] = "select";
+        stru["tables"] = "knowledge";
+        stru["data"] = {};
+
+        if (req.body.data) {
+            for (let i = 0; i < req.body.data.length; i++) {
+                let queryStr = [];
+                let q = req.body.data[i].split("&");
+                for (let j = 0; j < q.length; j++) {
+                    let [key, value] = q[j].split("=");
+                    if (key == "status") {
+                        let statusArr = value.split(",").map(e => `curStatus=${e}`);
+                        queryStr.append(`(${statusArr.join(" or ")})`);
+                    } else if (key == "author") {
+                        queryStr.append(`(author=${value})`);
+                    }
+                }
+                stru["data"][`COUNT(case when (${queryStr.join(' and ')}) then 1 else 0 end) as ${"op"+(i+1)}`] = 0;
+            }
+        }
+        try {
+            let result = await dbController.ControlAPI_obj_async(stru);
+            let arr = [];
+            for (var key in result){
+                arr.append(result[key]);
+            }
+			utils.sendResponse(res, 200, {"errorCode": 0, "msg": "", "data" : arr});
+		} catch(error) {
+			utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.SEARCH_DATA_FAIL, "msg": "查找知识数量失败 " + error})
+		}
+    },
+
     this.searchInfo = async (req, res, next) => {
         let stru = dbController.getSQLObject();
         stru["query"] = "select";
