@@ -149,9 +149,9 @@ var infoSystem = function() {
                     let [key, value] = q[j].split("=");
                     if (key == "status") {
                         let statusArr = value.split(",").map(e => `curStatus=${e}`);
-                        queryStr.append(`(${statusArr.join(" or ")})`);
+                        queryStr.push(`(${statusArr.join(" or ")})`);
                     } else if (key == "author") {
-                        queryStr.append(`(author=${value})`);
+                        queryStr.push(`(author=${value})`);
                     }
                 }
                 stru["data"][`COUNT((${queryStr.join(' and ')}) or null) as ${"op"+(i+1)}`] = 0;
@@ -161,7 +161,7 @@ var infoSystem = function() {
             let result = await dbController.ControlAPI_obj_async(stru);
             let arr = [];
             for (var key in result){
-                arr.append(result[key]);
+                arr.push(result[key]);
             }
 			utils.sendResponse(res, 200, {"errorCode": 0, "msg": "", "data" : arr});
 		} catch(error) {
