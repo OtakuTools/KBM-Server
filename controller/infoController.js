@@ -154,7 +154,7 @@ var infoSystem = function() {
                         queryStr.append(`(author=${value})`);
                     }
                 }
-                stru["data"][`COUNT(case when (${queryStr.join(' and ')}) then 1 else 0 end) as ${"op"+(i+1)}`] = 0;
+                stru["data"][`COUNT((${queryStr.join(' and ')}) or null) as ${"op"+(i+1)}`] = 0;
             }
         }
         try {
