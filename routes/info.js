@@ -18,6 +18,8 @@ router.get('/getSeq', userSystem.userLoginCheck, infoSystem.userPermissionCheck,
 
 router.get('/search', userSystem.userLoginCheck, infoSystem.userPermissionCheck, infoSystem.searchInfo);
 
+router.get('/getUser', userSystem.userLoginCheck, infoSystem.userPermissionCheck, userSystem.userGetCurInfo);
+
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });

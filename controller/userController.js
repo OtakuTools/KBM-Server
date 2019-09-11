@@ -162,6 +162,29 @@ var userSystem = function() {
         }
     },
 
+    this.userGetCurInfo = async (req, res, next) => {
+        let stru = dbController.getSQLObject();
+        stru["query"] = "select";
+        stru["tables"] = "userInfo";
+        stru["data"] = {
+            "realname": 0,
+            "department": 0
+        };
+        stru["where"]["condition"] = [
+            "username = " + dbController.typeTransform(req.query.token.split("_")[1])
+        ];
+        try {
+            let result = await dbController.ControlAPI_obj_async(stru);
+            if(result.length == 0){
+                utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.GET_USER_FAIL, "msg": "当前系统无用户信息"});
+            } else {
+                utils.sendResponse(res, 200, {"errorCode": 0, "msg": "查询用户状态成功", "data": result});
+            }
+        } catch(error) {
+            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.GET_USER_FAIL, "msg": "无法查询用户信息"});
+        }
+    },
+
     this.userGetInfo = async (req, res, next) => {
         let stru = dbController.getSQLObject();
         stru["query"] = "select";
