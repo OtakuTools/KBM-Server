@@ -151,7 +151,7 @@ var infoSystem = function() {
                         let statusArr = value.split(",").map(e => `curStatus=${e}`);
                         queryStr.push(`(${statusArr.join(" or ")})`);
                     } else if (key == "author") {
-                        queryStr.push(`(author=${value})`);
+                        queryStr.push(`(author=\'${value}\')`);
                     }
                 }
                 stru["data"][`COUNT((${queryStr.join(' and ')}) or null) as ${"op"+(i+1)}`] = 0;
@@ -163,10 +163,10 @@ var infoSystem = function() {
             for (var key in result){
                 arr.push(result[key]);
             }
-			utils.sendResponse(res, 200, {"errorCode": 0, "msg": "", "data" : arr});
-		} catch(error) {
-			utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.SEARCH_DATA_FAIL, "msg": "查找知识数量失败 " + error})
-		}
+            utils.sendResponse(res, 200, {"errorCode": 0, "msg": "", "data" : arr});
+        } catch(error) {
+            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.SEARCH_DATA_FAIL, "msg": "查找知识数量失败 " + error})
+        }
     },
 
     this.searchInfo = async (req, res, next) => {
