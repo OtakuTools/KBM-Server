@@ -17,15 +17,15 @@ var infoSystem = function() {
         stru["data"] = {
             "sequence" : req.body.sequence,
             "department": req.body.department,
-			"applicant" : req.body.applicant,
+            "applicant" : req.body.applicant,
             "knowledgeType" : req.body.knowledgeType,
-			"discoverTime" : req.body.discoverTime,
+            "discoverTime" : req.body.discoverTime,
             "resolveTime" : req.body.resolveTime,
             "lastfor" : req.body.lastfor,
-			"kTitle" : req.body.kTitle,
-			"kContent" : req.body.kContent,
-			"kMethod" : req.body.kMethod,
-			"curStatus" : 0
+            "kTitle" : req.body.kTitle,
+            "kContent" : req.body.kContent,
+            "kMethod" : req.body.kMethod,
+            "curStatus" : 0
         };
         if (req.body.author) {
             stru["data"]["author"] = req.body.author;
@@ -48,13 +48,13 @@ var infoSystem = function() {
         stru["tables"] = "knowledge";
         stru["data"] = {
             "department": req.body.department,
-			"applicant" : req.body.applicant,
+            "applicant" : req.body.applicant,
             "knowledgeType" : req.body.knowledgeType,
-			"discoverTime" : req.body.discoverTime,
+            "discoverTime" : req.body.discoverTime,
             "resolveTime" : req.body.resolveTime,
             "lastfor" : req.body.lastfor,
-			"kTitle" : req.body.kTitle,
-			"kContent" : req.body.kContent,
+            "kTitle" : req.body.kTitle,
+            "kContent" : req.body.kContent,
             "kMethod" : req.body.kMethod,
             "curStatus": req.body.curStatus
         };
@@ -160,8 +160,8 @@ var infoSystem = function() {
         try {
             let result = await dbController.ControlAPI_obj_async(stru);
             let arr = [];
-            for (var key in result){
-                arr.push(result[key]);
+            for (var key in result[0]){
+                arr.push(result[0][key]);
             }
             utils.sendResponse(res, 200, {"errorCode": 0, "msg": "", "data" : arr});
         } catch(error) {
@@ -220,7 +220,7 @@ var infoSystem = function() {
         let searchOption_items = {};
         let orderStr = "sequence ";
         if(req.query.sortOrder) {
-			orderStr += (req.query.sortOrder && req.query.sortOrder == "asc") ? "ASC" : "DESC";
+            orderStr += (req.query.sortOrder && req.query.sortOrder == "asc") ? "ASC" : "DESC";
         }
         searchOption_items["order by"] = orderStr;
         if(req.query.page && req.query.pageSize) {
@@ -230,11 +230,11 @@ var infoSystem = function() {
         stru["options"] = searchOption_items;
 
         try {
-			let result = await dbController.ControlAPI_obj_async(stru);
-			utils.sendResponse(res, 200, {"errorCode": 0, "msg": "", "data" : { "count": total, "content" : result}});
-		} catch(error) {
-			utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.SEARCH_DATA_FAIL, "msg": "查找知识失败 " + error})
-		}
+            let result = await dbController.ControlAPI_obj_async(stru);
+            utils.sendResponse(res, 200, {"errorCode": 0, "msg": "", "data" : { "count": total, "content" : result}});
+        } catch(error) {
+            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.SEARCH_DATA_FAIL, "msg": "查找知识失败 " + error})
+        }
     },
 
     this.getSeq = async (req , res, next) => {
