@@ -195,6 +195,12 @@ var infoSystem = function() {
                 (resolveTime >= ${dbController.typeTransform(start)} and resolveTime <= ${dbController.typeTransform(end)})
             )`);
         }
+        if (req.query.current) {
+            let [start, end] = req.query.current.split(",");
+            searchBy_items.push(`(
+                FROM_UNIXTIME(modifyTime, 'YYYY-MM-DD') >= ${dbController.typeTransform(start)} and FROM_UNIXTIME(modifyTime, 'YYYY-MM-DD') <= ${dbController.typeTransform(end)}
+            )`);
+        }
         if (req.query.status) {
             let statusArr = req.query.status.split(",").map(e => `curStatus=${e}`);
             searchBy_items.push(`(${statusArr.join(" or ")})`);

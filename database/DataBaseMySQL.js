@@ -100,7 +100,7 @@ var database = {
     },
 	
     dataBaseControl: function(sql, args, callback){
-        console.log(sql);
+        // console.log(sql);
         if(args == null || args.length == 0){
             connection.query(sql, function(error, results, fields){
                 if(error){
