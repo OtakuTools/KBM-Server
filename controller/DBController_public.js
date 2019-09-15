@@ -148,6 +148,21 @@ var dbController = function() {
 		}
 		return Promise.all(promiseList);
 	}
+
+	this.ControlAPI_objs_trans_async = function(...vars) {
+		let len = vars.length-1;
+		let callback = vars[vars.length-1];
+		let sqlObjList = [];
+		for(let i = 0; i < len; i++){
+			if (vars[i].sql) {
+				sqlObjList.push(vars[i]);
+			} else {
+				let sqlObj = this._structureAnalysis(vars[i]);
+				sqlObjList.push(sqlObj);
+			}
+		}
+		database.execTrans(sqlObjList, callback);
+	}
 };
 
 module.exports = new dbController();

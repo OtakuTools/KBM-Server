@@ -269,17 +269,25 @@ var infoSystem = function() {
             console.error("当前日期已存在");
         }
 
-        try {
-            let result = await dbController.ControlAPI_obj_async(stru1);
-            try {
-                await dbController.ControlAPI_str_async(stru2);
-                utils.sendResponse(res, 200, {"errorCode": 0, "msg": "", "data": result[0]});
-            } catch (error) {
-                utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.GET_SEQ_FAIL, "msg": "更新序号失败"});
+        // try {
+        //     let result = await dbController.ControlAPI_obj_async(stru1);
+        //     try {
+        //         await dbController.ControlAPI_str_async(stru2);
+        //         utils.sendResponse(res, 200, {"errorCode": 0, "msg": "", "data": result[0]});
+        //     } catch (error) {
+        //         utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.GET_SEQ_FAIL, "msg": "更新序号失败"});
+        //     }
+        // } catch (error) {
+        //     utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.GET_SEQ_FAIL, "msg": "获取序号失败"});
+        // }
+        dbController.ControlAPI_objs_trans_async(stru1, stru2, (error, result) => {
+            if (error) {
+                utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.GET_SEQ_FAIL, "msg": "获取序号失败"});
+                return;
+            } else {
+                utils.sendResponse(res, 200, {"errorCode": 0, "msg": "", "data": result[0][0]});
             }
-        } catch (error) {
-            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.GET_SEQ_FAIL, "msg": "获取序号失败"});
-        }
+        })
     },
 
     this.userPermissionCheck = (req, res, next) => {
