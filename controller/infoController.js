@@ -2,13 +2,10 @@ var dbController = require('./DBController_public');
 var utils = require('./utils');
 var CONFIG = require('./Config');
 var logSystem = require("./logController");
-var Lock = require('lock').Lock;
 
 var infoSystem = function() {
 
     this.version = "1.0.0",
-
-    this.lock = Lock(),
 
     this.addInfo = async (req, res, next) => {
         let stru = dbController.getSQLObject();
@@ -266,29 +263,23 @@ var infoSystem = function() {
 
         let stru2 = dbController.getSQLObject_sv();
         stru2["sql"] = `update seqRecord set seq = seq + 1 where day = '${today}';`;
-        this.lock('getSeqLock', async function (release) { 
-            //called when resource is available.
+        try {
+            await dbController.ControlAPI_obj_async(stru);
+        } catch(error) {
+            console.error("当前日期已存在");
+        }
+
+        try {
+            let result = await dbController.ControlAPI_obj_async(stru1);
             try {
-                await dbController.ControlAPI_obj_async(stru);
-            } catch(error) {
-                console.error("当前日期已存在");
-            }
-    
-            try {
-                let result = await dbController.ControlAPI_obj_async(stru1);
-                try {
-                    await dbController.ControlAPI_str_async(stru2);
-                    release((err) => { console.error(err); });
-                    utils.sendResponse(res, 200, {"errorCode": 0, "msg": "", "data": result[0]});
-                } catch (error) {
-                    release((err) => { console.error(err); });
-                    utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.GET_SEQ_FAIL, "msg": "更新序号失败"});
-                }
+                await dbController.ControlAPI_str_async(stru2);
+                utils.sendResponse(res, 200, {"errorCode": 0, "msg": "", "data": result[0]});
             } catch (error) {
-                release((err) => { console.error(err); });
-                utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.GET_SEQ_FAIL, "msg": "获取序号失败"});
+                utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.GET_SEQ_FAIL, "msg": "更新序号失败"});
             }
-        });
+        } catch (error) {
+            utils.sendResponse(res, 404, {"errorCode": CONFIG.ErrorCode.GET_SEQ_FAIL, "msg": "获取序号失败"});
+        }
     },
 
     this.userPermissionCheck = (req, res, next) => {
