@@ -203,7 +203,7 @@ var infoSystem = function() {
             searchBy_items.push(`(${statusArr.join(" or ")})`);
         }
         if (req.query.author) {
-            searchBy_items.push("author = " +  dbController.typeTransform(name))
+            searchBy_items.push("author = " +  dbController.typeTransform(req.query.author))
         }
         stru["where"]["condition"] = searchBy_items;
         try {
