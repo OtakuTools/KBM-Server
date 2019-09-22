@@ -30,6 +30,9 @@ var infoSystem = function() {
         if (req.body.auditor) {
             stru["data"]["auditor"] = req.body.auditor;
         }
+        if (req.body.opinion) {
+            stru["data"]["opinion"] = req.body.opinion;
+        }
         try {
             await dbController.ControlAPI_obj_async(stru);
             await logSystem.addLog(req.query.token.split('_')[1], 1, `新建知识：${req.body.sequence}`);
@@ -61,6 +64,9 @@ var infoSystem = function() {
         if (req.body.auditor) {
             stru["data"]["auditor"] = req.body.auditor;
         }
+        if (req.body.opinion) {
+            stru["data"]["opinion"] = req.body.opinion;
+        }
         stru["where"]["condition"] = [
             "sequence = " + dbController.typeTransform(req.body.sequence)
         ];
@@ -85,6 +91,9 @@ var infoSystem = function() {
         }
         if (req.body.auditor) {
             stru["data"]["auditor"] = req.body.auditor;
+        }
+        if (req.body.opinion) {
+            stru["data"]["opinion"] = req.body.opinion;
         }
         stru["where"]["condition"] = [
             "sequence = " + dbController.typeTransform(req.body.sequence)
