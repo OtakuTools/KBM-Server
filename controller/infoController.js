@@ -31,7 +31,11 @@ var infoSystem = function() {
             stru["data"]["auditor"] = req.body.auditor;
         }
         if (req.body.opinion) {
-            stru["data"]["opinion"] = req.body.opinion;
+            if (req.body.opinion == "*") {
+                stru["data"]["opinion"] = "";
+            } else {
+                stru["data"]["opinion"] = req.body.opinion;
+            }
         }
         try {
             await dbController.ControlAPI_obj_async(stru);
@@ -65,7 +69,11 @@ var infoSystem = function() {
             stru["data"]["auditor"] = req.body.auditor;
         }
         if (req.body.opinion) {
-            stru["data"]["opinion"] = req.body.opinion;
+            if (req.body.opinion == "*") {
+                stru["data"]["opinion"] = "";
+            } else {
+                stru["data"]["opinion"] = req.body.opinion;
+            }
         }
         stru["where"]["condition"] = [
             "sequence = " + dbController.typeTransform(req.body.sequence)
@@ -93,7 +101,11 @@ var infoSystem = function() {
             stru["data"]["auditor"] = req.body.auditor;
         }
         if (req.body.opinion) {
-            stru["data"]["opinion"] = req.body.opinion;
+            if (req.body.opinion == "*") {
+                stru["data"]["opinion"] = "";
+            } else {
+                stru["data"]["opinion"] = req.body.opinion;
+            }
         }
         stru["where"]["condition"] = [
             "sequence = " + dbController.typeTransform(req.body.sequence)
