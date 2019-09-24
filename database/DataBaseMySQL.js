@@ -85,7 +85,18 @@ var database = {
 							});
 						}).catch((error) => {console.log(error);});
 					}
-					console.log("SUCCESS: create database successfully!");
+                    console.log("SUCCESS: create database successfully!");
+                    await new Promise((resolve, reject) => {
+                        connection.query("insert into userInfo(username, password, type, realname, department) value ('Admin', 'Admin', 'admin', 'admin', 'admin');", function(error, results, fields){
+                            if(error){
+                                reject(error);
+                                return;
+                            }
+                            resolve();
+                            return;
+                        });
+                    }).catch((error) => {console.log(error);});
+					console.log("SUCCESS: init user successfully!");
 					resolve();
 					return;
 				});
